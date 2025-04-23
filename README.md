@@ -12,6 +12,14 @@ npm run dev
 
 可以打开 [http://localhost:3000](http://localhost:3000) 查看运行结果。
 
+在运行成功后，即可调用以下接口：
+1. 注册：`http://localhost:3000/api/agent/register`
+2. 创建实例 `http://localhost:3000/api/agent/create`
+3. 删除实例 `http://localhost:3000/api/agent/delete`
+4. 获取ZEGO Token `http://localhost:3000/api/zegotoken`
+
+注意：如果是在 PC/Mac 上运行服务端然后在 Android 或者 iOS 等移动设备上调试，请把 `localhost` 替换成 PC/Mac 的实际局域网地址进行访问。
+
 ## 部署到 Netlify
 
 请注意⚠️：中国大陆建议使用该方式
@@ -40,8 +48,14 @@ TTS_BYTEDANCE_VOICE_TYPE=zh_female_wanwanxiaohe_moon_bigtts
 ![](./images/import-env.png)
 3. 跳转到 `Deploys` 页面并点击右侧的 `Trigger deploy` 然后选择 `Deploy site` 选项触发网站重新构建
 ![deploy-site.png](./images/deploy-site.png)
-4. 部署完成后，在 `Site overview` 页面即可查看到您网站的域名，使用该域名可访问API接口
+4. 部署完成后，在 `Site overview` 页面即可查看到您网站的域名。
 ![](./images/site-overview.png)
+
+使用该域名可访问API接口：
+1. 注册：`https://cute-******.netlify.app/api/agent/register`
+2. 创建实例 `https://cute-******.netlify.app/api/agent/create`
+3. 删除实例 `https://cute-******.netlify.app/api/agent/delete`
+4. 获取ZEGO Token `https://cute-******.netlify.app/api/zegotoken`
 
 ## 部署到 Vercel
 
@@ -51,6 +65,13 @@ TTS_BYTEDANCE_VOICE_TYPE=zh_female_wanwanxiaohe_moon_bigtts
 
 点击上方按钮可以一键将此项目部署到Vercel平台。部署过程中，您需要填写所有必要的环境变量。关于环境变量的详细说明，请参考[.env.example](.env.example)文件。
 
+![](./images/vercel-server.png)
+
+使用该域名可访问API接口：
+1. 注册：`https://****.vercel.app/api/agent/register`
+2. 创建实例 `https://****.vercel.app/api/agent/create`
+3. 删除实例 `https://****.vercel.app/api/agent/delete`
+4. 获取ZEGO Token `https://****.vercel.app/api/zegotoken`
 
 ## 项目结构
 
