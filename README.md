@@ -18,7 +18,30 @@ npm run dev
 
 [![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/ZEGOCLOUD/ai_agent_quick_start_server)
 
-点击上方按钮可以一键将此项目部署到 Netlify 平台。部署过程中，您需要导入所有必要的环境变量。
+点击上方按钮可以一键将此项目部署到 Netlify 平台。
+部署过程中，您需要导入所有必要的环境变量。具体步骤如下：
+
+1. 在 Netlify 平台跳转到 `你的Site实例 -> Site configuration -> Environment variables`
+2. 点击右侧的 `Add a variable` 并选择 `Import from a .env file`，然后将以下内容拷贝到输入框（Contents of .env file:）中，然后点击 `Import variables`。
+```bash
+# 请替换成您实际的内容
+NEXT_PUBLIC_ZEGO_APP_ID=
+ZEGO_SERVER_SECRET=
+
+LLM_API_KEY=
+LLM_BASE_URL=https://ark.cn-beijing.volces.com/api/v3
+LLM_MODEL=deepseek-v3-250324
+
+TTS_BYTEDANCE_APP_ID=4******9
+TTS_BYTEDANCE_TOKEN=N8I************************stqp
+TTS_BYTEDANCE_CLUSTER=volcano_tts
+TTS_BYTEDANCE_VOICE_TYPE=zh_female_wanwanxiaohe_moon_bigtts
+```
+![](./images/import-env.png)
+3. 跳转到 `Deploys` 页面并点击右侧的 `Trigger deploy` 然后选择 `Deploy site` 选项触发网站重新构建
+![deploy-site.png](./images/deploy-site.png)
+4. 部署完成后，在 `Site overview` 页面即可查看到您网站的域名，使用该域名可访问API接口
+![](./images/site-overview.png)
 
 ## 部署到 Vercel
 
