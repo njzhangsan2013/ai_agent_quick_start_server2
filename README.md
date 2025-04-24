@@ -3,14 +3,16 @@
 
 你可以在本地安装依赖环境后，在本地启动服务端，然后客户端通过连接到同一个局域网访问相应接口。
 
-- 请安装[Node.js 18.18](https://nodejs.org/)或以上版本。
-- 进入项目根目录运行以下命令以启动服务。
+1. 请安装[Node.js 18.18](https://nodejs.org/)或以上版本。
+2. 将本仓库代码下载至本地
+3. 将 `.env.example` 文件拷贝为 `.env` 并按说明填写好所有环境变量的值（如ZEGO APPID、LLM、TTS）。
+4. 进入项目根目录运行以下命令以启动服务。
 ```bash
 npm install
 npm run dev
 ```
 
-可以打开 [http://localhost:3000](http://localhost:3000) 查看运行结果。
+运行完成后，可以打开 [http://localhost:3000](http://localhost:3000) 查看运行结果。
 
 在运行成功后，即可调用以下接口：
 1. 注册：`http://localhost:3000/api/agent/register`
