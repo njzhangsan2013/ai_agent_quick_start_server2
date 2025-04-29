@@ -184,6 +184,7 @@ export class ZegoAIAgent {
     }
 
     async queryAgents(agentIds: string[]) {
+        // https://aigc-aiagent-api.zegotech.cn?Action=QueryAgents
         const action = 'QueryAgents';
         const body = {
             AgentIds: agentIds
@@ -197,6 +198,7 @@ export class ZegoAIAgent {
         if (!process.env.LLM_BASE_URL || !process.env.LLM_API_KEY || !process.env.LLM_MODEL) {
             throw new Error('LLM_BASE_URL, LLM_API_KEY and LLM_MODEL environment variables must be set');
         }
+        // https://aigc-aiagent-api.zegotech.cn?Action=RegisterAgent
         const action = 'RegisterAgent';
         const body = {
             AgentId: agentId,
@@ -205,7 +207,7 @@ export class ZegoAIAgent {
                 Url: process.env.LLM_BASE_URL || "",
                 ApiKey: process.env.LLM_API_KEY || "",
                 Model: process.env.LLM_MODEL || "",
-                SystemPrompt: SYSTEM_PROMPT
+                // SystemPrompt: SYSTEM_PROMPT
             },
             TTS: {
                 Vendor: "Bytedance",
@@ -231,16 +233,17 @@ export class ZegoAIAgent {
     }
 
     async createAgentInstance(agentId: string, userId: string, rtcInfo: RtcInfo, messages?: any[]) {
+        // https://aigc-aiagent-api.zegotech.cn?Action=CreateAgentInstance
         const action = 'CreateAgentInstance';
         const body = {
             AgentId: agentId,
             UserId: userId,
             RTC: rtcInfo,
-            MessageHistory: messages && messages.length > 0 ? {
-                SyncMode: 1,
-                Messages: messages,
+            MessageHistory: {
+                SyncMode: 1, // Change to 0 to use history messages from ZIM
+                Messages: messages && messages.length > 0 ? messages : [],
                 WindowSize: 10
-            } : undefined
+            }
         };
         const result = await this.sendRequest<any>(action, body);
         console.log("create agent instance result", result);
@@ -248,6 +251,7 @@ export class ZegoAIAgent {
     }
 
     async deleteAgentInstance(agentInstanceId: string) {
+        // https://aigc-aiagent-api.zegotech.cn?Action=DeleteAgentInstance
         const action = 'DeleteAgentInstance';
         const body = {
             AgentInstanceId: agentInstanceId
