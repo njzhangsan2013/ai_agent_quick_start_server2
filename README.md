@@ -3,9 +3,10 @@
 [![English](https://img.shields.io/badge/language-English-blue.svg)](./README.md) [![中文](https://img.shields.io/badge/language-中文-red.svg)](./README_ZH.md)
 
 - [AI Agent Server Example Usage Guide](#ai-agent-server-example-usage-guide)
-  - [Local Deployment](#local-deployment)
-  - [Deploy to Netlify](#deploy-to-netlify)
-  - [Deploy to Vercel](#deploy-to-vercel)
+  - [Run \& Deployment](#run--deployment)
+    - [Running Locally](#running-locally)
+    - [Deploy to Netlify](#deploy-to-netlify)
+    - [Deploy to Vercel](#deploy-to-vercel)
   - [Project Structure](#project-structure)
   - [API Interface Call Examples](#api-interface-call-examples)
     - [Response Format](#response-format)
@@ -18,7 +19,9 @@
     - [JavaScript/TypeScript Examples](#javascripttypescript-examples)
 
 
-## Local Deployment
+## Run & Deployment
+
+### Running Locally
 
 You can install the dependencies locally, start the server, and then have clients connect to the relevant interfaces through the same local network.
 
@@ -34,14 +37,13 @@ npm run dev
 After completion, you can open [http://localhost:3000](http://localhost:3000) to see the running result.
 
 Once running successfully, you can call the following interfaces:
-1. Registration: `http://localhost:3000/api/agent/register`
-2. Create Instance: `http://localhost:3000/api/agent/create`
-3. Delete Instance: `http://localhost:3000/api/agent/delete`
-4. Get ZEGO Token: `http://localhost:3000/api/zegotoken`
+- Get ZEGO Token: `http://localhost:3000/api/zego-token`
+- Start talking with AI Agent: `http://localhost:3000/api/start`
+- Stop talk with AI Agent: `http://localhost:3000/api/stop`
 
 Note: If you are running the server on a PC/Mac and debugging on mobile devices like Android or iOS, please replace `localhost` with the actual LAN address of your PC/Mac.
 
-## Deploy to Netlify
+### Deploy to Netlify
 
 Please note ⚠️: This method is recommended for users in Mainland China
 
@@ -73,12 +75,11 @@ TTS_BYTEDANCE_VOICE_TYPE=zh_female_wanwanxiaohe_moon_bigtts
 ![](./images/site-overview.png)
 
 Use this domain to access the API interfaces:
-1. Registration: `https://cute-******.netlify.app/api/agent/register`
-2. Create Instance: `https://cute-******.netlify.app/api/agent/create`
-3. Delete Instance: `https://cute-******.netlify.app/api/agent/delete`
-4. Get ZEGO Token: `https://cute-******.netlify.app/api/zegotoken`
+- Get ZEGO Token: `https://cute-******.netlify.app/api/zego-token`
+- Start talking with AI Agent: `https://cute-******.netlify.app/api/start`
+- Stop talk with AI Agent: `https://cute-******.netlify.app/api/stop`
 
-## Deploy to Vercel
+### Deploy to Vercel
 
 Please note ⚠️: Access to Vercel from Mainland China may be problematic. If you can't access it, please use a VPN. After deployment, binding your own domain to the service can also allow normal access (be aware of the risk of domain blocking).
 
@@ -89,10 +90,9 @@ Click the button above to deploy this project to the Vercel platform with one cl
 ![](./images/vercel-server.png)
 
 Use this domain to access the API interfaces:
-1. Registration: `https://****.vercel.app/api/agent/register`
-2. Create Instance: `https://****.vercel.app/api/agent/create`
-3. Delete Instance: `https://****.vercel.app/api/agent/delete`
-4. Get ZEGO Token: `https://****.vercel.app/api/zegotoken`
+- Get ZEGO Token: `https://****.vercel.app/api/api/zego-token`
+- Start talking with AI Agent: `https://****.vercel.app/api/api/start`
+- Stop talk with AI Agent: `https://****.vercel.app/api/api/stop`
 
 ## Project Structure
 
