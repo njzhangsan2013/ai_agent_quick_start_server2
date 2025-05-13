@@ -30,6 +30,13 @@ export async function POST(req: NextRequest) {
             console.log("agent already exists");
         }
 
+
+        // 保存 agent_instance_id
+        const store = AgentStore.getInstance();
+        if (store.getAgentInstanceId()) {
+            await assistant.deleteAgentInstance(store.getAgentInstanceId());
+            store.setAgentInstanceId("");
+        }
         const agent_instance_id = await assistant.createAgentInstance(agent_id, user_id, {
             RoomId: room_id,
             AgentStreamId: agent_stream_id,
@@ -38,8 +45,6 @@ export async function POST(req: NextRequest) {
         });
         console.log("create agent instance", agent_instance_id);
 
-        // 保存 agent_instance_id
-        const store = AgentStore.getInstance();
         store.setAgentInstanceId(agent_instance_id);
 
         return Response.json({
