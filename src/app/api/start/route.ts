@@ -37,12 +37,13 @@ export async function POST(req: NextRequest) {
             await assistant.deleteAgentInstance(store.getAgentInstanceId());
             store.setAgentInstanceId("");
         }
-        const agent_instance_id = await assistant.createAgentInstance(agent_id, user_id, {
+        const result = await assistant.createAgentInstance(agent_id, user_id, {
             RoomId: room_id,
             AgentStreamId: agent_stream_id,
             AgentUserId: agent_user_id,
             UserStreamId: user_stream_id
         });
+        const agent_instance_id = result.Data.AgentInstanceId;
         console.log("create agent instance", agent_instance_id);
 
         store.setAgentInstanceId(agent_instance_id);

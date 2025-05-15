@@ -11,9 +11,9 @@ const SYSTEM_PROMPT = `
 人际关系：在教育界拥有良好的口碑，备受尊敬。与学生相处如同朋友，关心他们的成长；与同事合作默契，相互支持。
 过往经历：自幼对语言学习展现出浓厚兴趣，大学毅然选择主修语言学专业。毕业后全身心投入语言教育工作，至今已有 20 年的丰富教学经验。因其出色的教学成果，曾多次荣获优秀教师的荣誉称号。擅长多种语言的口语教学，帮助众多学生在语言能力上取得显著进步。
 经典台词：
-1. “语言的魅力无穷，让我们一起探索！”
-2. “只要有耐心和毅力，没有学不好的语言。”
-3. “别着急，一步一个脚印，你会发现自己的进步。”
+1. "语言的魅力无穷，让我们一起探索！"
+2. "只要有耐心和毅力，没有学不好的语言。"
+3. "别着急，一步一个脚印，你会发现自己的进步。"
 对话示例：
 1. 用户：李老师，我觉得这门语言太难了。
 李悦然：同学，别灰心，万事开头难，跟着老师的节奏，你会渐入佳境的。
@@ -62,6 +62,48 @@ interface SignatureParams {
     serverSecret: string;
     timestamp: number;
     action: string;
+}
+
+export interface LLMConfig {
+    Url: string;
+    ApiKey: string;
+    Model: string;
+    SystemPrompt?: string;
+    Temperature?: number;
+    TopP?: number;
+    Params?: any;
+}
+
+export interface FilterText {
+    BeginCharacters: string;
+    EndCharacters: string;
+}
+export interface TTSConfig {
+    Vendor: string;
+    Params?: any;
+    FilterText?: FilterText[];
+}
+
+export interface ASRConfig {
+    HotWord?: string;
+    Params?: any;
+}
+
+export interface ZIMConfig {
+    RobotId: string;
+    LoadMessageCount: number;
+}
+
+export interface MessageHistory {
+    SyncMode: number;
+    Messages: any[];
+    WindowSize: number;
+    ZIM: ZIMConfig;
+}
+
+export interface CallbackConfig {
+    ASRResult: number;
+    LLMResult: number;
 }
 
 // 会话消息响应类型
@@ -146,7 +188,7 @@ export class ZegoAIAgent {
         }
     }
 
-    private async sendRequest<T>(
+    async sendRequest<T>(
         action: string,
         body?: any,
         baseURL?: string,
@@ -170,13 +212,7 @@ export class ZegoAIAgent {
 
             const data = await response.json();
 
-            if (data.Code !== 0) {
-                const error = new Error(`ZEGO API error: ${data.Message}`);
-                (error as any).code = data.Code;
-                throw error;
-            }
-
-            return data.Data;
+            return data;
         } catch (error) {
             console.error(`Error in ${action}:`, error);
             throw error;
@@ -191,10 +227,10 @@ export class ZegoAIAgent {
         };
         const result = await this.sendRequest<any>(action, body);
         console.log("query agents result", result);
-        return result.Agents;
+        return result.Data.Agents;
     }
 
-    async registerAgent(agentId: string, agentName: string) {
+    async registerAgent(agentId: string, agentName: string, llmConfig: LLMConfig | null = null, ttsConfig: TTSConfig | null = null, asrConfig: ASRConfig | null = null) {
         if (!process.env.LLM_BASE_URL || !process.env.LLM_API_KEY || !process.env.LLM_MODEL) {
             throw new Error('LLM_BASE_URL, LLM_API_KEY and LLM_MODEL environment variables must be set');
         }
@@ -203,13 +239,13 @@ export class ZegoAIAgent {
         const body = {
             AgentId: agentId,
             Name: agentName,
-            LLM: {
+            LLM: llmConfig || {
                 Url: process.env.LLM_BASE_URL || "",
                 ApiKey: process.env.LLM_API_KEY || "",
                 Model: process.env.LLM_MODEL || "",
                 SystemPrompt: SYSTEM_PROMPT
             },
-            TTS: {
+            TTS: ttsConfig || {
                 Vendor: "Bytedance",
                 Params: {
                     "app": {
@@ -227,27 +263,35 @@ export class ZegoAIAgent {
                     }
                 },
                 FilterText: [{ BeginCharacters: "(", EndCharacters: ")" }, { BeginCharacters: "（", EndCharacters: "）" }, { BeginCharacters: "{", EndCharacters: "}" }],
+            },
+            ASR: asrConfig || {
+                HotWord: "",
+                Params: {}
             }
         };
         return this.sendRequest<any>(action, body);
     }
 
-    async createAgentInstance(agentId: string, userId: string, rtcInfo: RtcInfo, messages?: any[]) {
+    async createAgentInstance(agentId: string, userId: string, rtcInfo: RtcInfo, llmConfig: LLMConfig | null = null, ttsConfig: TTSConfig | null = null, asrConfig: ASRConfig | null = null, messageHistory: MessageHistory | null = null, callbackConfig: CallbackConfig | null = null) {
         // https://aigc-aiagent-api.zegotech.cn?Action=CreateAgentInstance
         const action = 'CreateAgentInstance';
         const body = {
             AgentId: agentId,
             UserId: userId,
             RTC: rtcInfo,
-            MessageHistory: {
+            MessageHistory: messageHistory || {
                 SyncMode: 1, // Change to 0 to use history messages from ZIM
-                Messages: messages && messages.length > 0 ? messages : [],
+                Messages: [],
                 WindowSize: 10
-            }
+            },
+            LLM: llmConfig,
+            TTS: ttsConfig,
+            ASR: asrConfig,
+            CallbackConfig: callbackConfig
         };
         const result = await this.sendRequest<any>(action, body);
         console.log("create agent instance result", result);
-        return result.AgentInstanceId;
+        return result;
     }
 
     async deleteAgentInstance(agentInstanceId: string) {
@@ -256,6 +300,21 @@ export class ZegoAIAgent {
         const body = {
             AgentInstanceId: agentInstanceId
         };
-        return this.sendRequest(action, body);
+        const result = await this.sendRequest<any>(action, body);
+        console.log("delete agent instance result", result);
+        return result;
+    }
+
+    async listAgents(limit?: number, cursor?: string) {
+        // https://aigc-aiagent-api.zegotech.cn?Action=ListAgents
+        const action = 'ListAgents';
+        const body: any = {};
+
+        if (limit !== undefined) body.Limit = limit;
+        if (cursor) body.Cursor = cursor;
+
+        const result = await this.sendRequest<any>(action, body);
+        console.log("list agents result", result);
+        return result;
     }
 }
