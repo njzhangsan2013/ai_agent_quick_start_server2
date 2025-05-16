@@ -41,7 +41,7 @@ export default function Home() {
     <>
       <div className="navbar bg-base-100 shadow-sm">
         <div className="flex-1">
-          <a className="btn btn-ghost text-xl">ZEGO AIAgent</a>
+          <a className="btn btn-ghost text-xl">ZEGO 实时互动 AI Agent</a>
         </div>
         <div className="flex-none">
           <ul className="menu menu-horizontal px-1">
@@ -61,6 +61,11 @@ export default function Home() {
           </ul>
         </div>
       </div>
+
+      <div role="alert" className="alert alert-info alert-soft">
+        <span>智能体被打断、用户说话状态、智能体说话状态、异常事件等，请联系技术支持配置好回调后，在您的服务端终端查看日志输出！</span>
+      </div>
+
       <div className="min-h-screen p-8 flex items-center justify-center">
 
 
