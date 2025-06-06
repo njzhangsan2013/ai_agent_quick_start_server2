@@ -62,8 +62,9 @@ export default function Home() {
         </div>
       </div>
 
-      <div role="alert" className="alert alert-info alert-soft">
-        <span>智能体被打断、用户说话状态、智能体说话状态、异常事件等，请联系技术支持配置好回调后，在您的服务端终端查看日志输出！</span>
+      <div role="alert" className="alert alert-info alert-soft flex flex-col">
+        <div>智能体被打断、用户说话状态、智能体说话状态、异常事件等，请联系技术支持配置好回调后，在您的服务端终端查看日志输出！</div>
+        <div className="mt-2">For events like agent interruption, user speaking status, agent speaking status, and exceptions, please contact technical support to configure callbacks and check the logs in your server terminal!</div>
       </div>
 
       <div className="min-h-screen p-8 flex items-center justify-center">
@@ -71,7 +72,7 @@ export default function Home() {
 
         {/* name of each tab group should be unique */}
         <div role="tablist" className="tabs tabs-lift tabs-xl">
-          <input type="radio" name="my_tabs_2" className="tab" aria-label="智能体配置管理" defaultChecked />
+          <input type="radio" name="my_tabs_2" className="tab" aria-label="智能体配置管理（Agent Management）" defaultChecked />
           <div className="tab-content" style={{ minHeight: '800px' }}>
             <label className="select w-full">
               <span className="label">Agent list(智能体列表)</span>
@@ -86,11 +87,14 @@ export default function Home() {
 
             <div className="collapse collapse-arrow bg-base-100 border border-base-300">
               <input type="radio" name="my-accordion-2" />
-              <div className="collapse-title font-semibold">注册智能体</div>
+              <div className="collapse-title font-semibold">注册智能体（RegisterAgent）</div>
               <div className="collapse-content text-sm">
                 <div role="alert" className="alert alert-warning alert-soft">
                   <span>请注意检查参数是否有效！即使参数无效也可能注册成功！</span>
                 </div>
+                <div role="alert" className="alert alert-warning alert-soft">
+                  <span>Please check if the parameters are valid! Registration may succeed even with invalid parameters!</span>
+                </div>  
                 <button className="btn btn-sm" onClick={async () => {
                   console.log('Button clicked', document.querySelector('#register-agent-textarea').value); // 检查按钮是否被点击
                   try {
@@ -109,9 +113,9 @@ export default function Home() {
                   } catch (error) {
                     alert('请求失败：' + error.message);
                   }
-                }}>点我发起请求</button>
+                }}>点我发起请求（Send Request）</button>
                 <fieldset className="fieldset">
-                  <legend className="fieldset-legend">请求参数</legend>
+                  <legend className="fieldset-legend">请求参数（Request Parameters）</legend>
                   <textarea id="register-agent-textarea" className="textarea w-full h-[300px]" placeholder="请根据您地实际内容填写" defaultValue={`
 {
     "AgentId": "test-agent-123",
@@ -145,10 +149,13 @@ export default function Home() {
             </div>
             <div className="collapse collapse-arrow bg-base-100 border border-base-300">
               <input type="radio" name="my-accordion-2" />
-              <div className="collapse-title font-semibold">修改智能体</div>
+              <div className="collapse-title font-semibold">修改智能体（UpdateAgent）</div>
               <div className="collapse-content text-sm">
                 <div role="alert" className="alert alert-warning alert-soft">
                   <span>请注意检查参数是否有效！即使参数无效也可能修改成功！</span>
+                </div>
+                <div role="alert" className="alert alert-warning alert-soft">
+                  <span>Please check if the parameters are valid! Update may succeed even with invalid parameters!</span>
                 </div>
                 <button className="btn btn-sm" onClick={async () => {
                   console.log('Button clicked', document.querySelector('#update-agent-textarea').value); // 检查按钮是否被点击
@@ -168,9 +175,9 @@ export default function Home() {
                   } catch (error) {
                     alert('请求失败：' + error.message);
                   }
-                }}>点我发起请求</button>
+                }}>点我发起请求（Send Request）</button>
                 <fieldset className="fieldset">
-                  <legend className="fieldset-legend">请求参数</legend>
+                  <legend className="fieldset-legend">请求参数（Request Parameters）</legend>
                   <textarea id="update-agent-textarea" className="textarea w-full h-[300px]" placeholder="请根据您地实际内容填写" defaultValue={`
 {
     "AgentId": "test-agent-123",
@@ -204,7 +211,7 @@ export default function Home() {
             </div>
             <div className="collapse collapse-arrow bg-base-100 border border-base-300">
               <input type="radio" name="my-accordion-2" />
-              <div className="collapse-title font-semibold">注销智能体</div>
+              <div className="collapse-title font-semibold">注销智能体（UnregisterAgent）</div>
               <div className="collapse-content text-sm">
                 <button className="btn btn-sm" onClick={async () => {
                   console.log('Button clicked', document.querySelector('#unregister-agent-textarea').value); // 检查按钮是否被点击
@@ -224,9 +231,9 @@ export default function Home() {
                   } catch (error) {
                     alert('请求失败：' + error.message);
                   }
-                }}>点我发起请求</button>
+                }}>点我发起请求（Send Request）</button>
                 <fieldset className="fieldset">
-                  <legend className="fieldset-legend">请求参数</legend>
+                  <legend className="fieldset-legend">请求参数（Request Parameters）</legend>
                   <textarea id="unregister-agent-textarea" className="textarea w-full h-[300px]" placeholder="请根据您地实际内容填写" defaultValue={`
 {
     "AgentId": "test-agent-123"
@@ -243,10 +250,13 @@ export default function Home() {
           <div className="tab-content" style={{ minHeight: '800px' }}>
             <div className="collapse collapse-arrow bg-base-100 border border-base-300">
               <input type="radio" name="my-accordion-2" />
-              <div className="collapse-title font-semibold">创建智能体实例</div>
+              <div className="collapse-title font-semibold">创建智能体实例（CreateAgentInstance）</div>
               <div className="collapse-content text-sm">
                 <div role="alert" className="alert alert-warning alert-soft">
                   <span>请注意检查参数是否有效！即使参数无效也可能创建成功！</span>
+                </div>
+                <div role="alert" className="alert alert-warning alert-soft">
+                  <span>Please check if the parameters are valid! Creation may succeed even with invalid parameters!</span>
                 </div>
                 <button className="btn btn-sm" onClick={async () => {
                   try {
@@ -265,9 +275,9 @@ export default function Home() {
                   } catch (error) {
                     alert('请求失败：' + error.message);
                   }
-                }}>点我发起请求</button>
+                }}>点我发起请求（Send Request）</button>
                 <fieldset className="fieldset">
-                  <legend className="fieldset-legend">请求参数</legend>
+                  <legend className="fieldset-legend">请求参数（Request Parameters）</legend>
                   <textarea id="create-agent-instance-textarea" className="textarea w-full h-[300px]" placeholder="请根据您地实际内容填写" defaultValue={`
 {
     "AgentId": "test-agent-123",
@@ -286,10 +296,13 @@ export default function Home() {
             </div>
             <div className="collapse collapse-arrow bg-base-100 border border-base-300">
               <input type="radio" name="my-accordion-2" />
-              <div className="collapse-title font-semibold">修改智能体实例</div>
+              <div className="collapse-title font-semibold">修改智能体实例（UpdateAgentInstance）</div>
               <div className="collapse-content text-sm">
                 <div role="alert" className="alert alert-warning alert-soft">
                   <span>请注意检查参数是否有效！即使参数无效也可能修改成功！</span>
+                </div>
+                <div role="alert" className="alert alert-warning alert-soft">
+                  <span>Please check if the parameters are valid! Update may succeed even with invalid parameters!</span>
                 </div>
                 <button className="btn btn-sm" onClick={async () => {
                   try {
@@ -308,9 +321,9 @@ export default function Home() {
                   } catch (error) {
                     alert('请求失败：' + error.message);
                   }
-                }}>点我发起请求</button>
+                }}>点我发起请求（Send Request）</button>
                 <fieldset className="fieldset">
-                  <legend className="fieldset-legend">请求参数</legend>
+                  <legend className="fieldset-legend">请求参数（Request Parameters）</legend>
                   <textarea id="update-agent-instance-textarea" className="textarea w-full h-[300px]" placeholder="请根据您地实际内容填写" defaultValue={`
 {
     "AgentInstanceId": "1912124734317838336",
@@ -327,7 +340,7 @@ export default function Home() {
             </div>
             <div className="collapse collapse-arrow bg-base-100 border border-base-300">
               <input type="radio" name="my-accordion-2" />
-              <div className="collapse-title font-semibold">删除智能体实例</div>
+              <div className="collapse-title font-semibold">删除智能体实例（DeleteAgentInstance）</div>
               <div className="collapse-content text-sm">
                 <button className="btn btn-sm" onClick={async () => {
                   try {
@@ -346,9 +359,9 @@ export default function Home() {
                   } catch (error) {
                     alert('请求失败：' + error.message);
                   }
-                }}>点我发起请求</button>
+                }}>点我发起请求（Send Request）</button>
                 <fieldset className="fieldset">
-                  <legend className="fieldset-legend">请求参数</legend>
+                  <legend className="fieldset-legend">请求参数（Request Parameters）</legend>
                   <textarea id="delete-agent-instance-textarea" className="textarea w-full h-[300px]" placeholder="请根据您地实际内容填写" defaultValue={`
 {
     "AgentInstanceId": "1909811657303920640"
@@ -365,7 +378,7 @@ export default function Home() {
           <div className="tab-content" style={{ minHeight: '800px' }}>
             <div className="collapse collapse-arrow bg-base-100 border border-base-300">
               <input type="radio" name="my-accordion-2" />
-              <div className="collapse-title font-semibold">主动调用LLM</div>
+              <div className="collapse-title font-semibold">主动调用LLM（SendAgentInstanceLLM）</div>
               <div className="collapse-content text-sm">
                 <button className="btn btn-sm" onClick={async () => {
                   try {
@@ -384,9 +397,9 @@ export default function Home() {
                   } catch (error) {
                     alert('请求失败：' + error.message);
                   }
-                }}>点我发起请求</button>
+                }}>点我发起请求（Send Request）</button>
                 <fieldset className="fieldset">
-                  <legend className="fieldset-legend">请求参数</legend>
+                  <legend className="fieldset-legend">请求参数（Request Parameters）</legend>
                   <textarea id="send-instance-llm-textarea" className="textarea w-full h-[300px]" placeholder="请根据您地实际内容填写" defaultValue={`
 {
     "AgentInstanceId": "1907755175297171456",
@@ -398,7 +411,7 @@ export default function Home() {
             </div>
             <div className="collapse collapse-arrow bg-base-100 border border-base-300">
               <input type="radio" name="my-accordion-2" />
-              <div className="collapse-title font-semibold">主动调用TTS</div>
+              <div className="collapse-title font-semibold">主动调用TTS（SendAgentInstanceTTS）</div>
               <div className="collapse-content text-sm">
                 <button className="btn btn-sm" onClick={async () => {
                   try {
@@ -417,9 +430,9 @@ export default function Home() {
                   } catch (error) {
                     alert('请求失败：' + error.message);
                   }
-                }}>点我发起请求</button>
+                }}>点我发起请求（Send Request）</button>
                 <fieldset className="fieldset">
-                  <legend className="fieldset-legend">请求参数</legend>
+                  <legend className="fieldset-legend">请求参数（Request Parameters）</legend>
                   <textarea id="sned-instance-tts-textarea" className="textarea w-full h-[300px]" placeholder="请根据您地实际内容填写" defaultValue={`
 {
     "AgentInstanceId": "1907780504753553408",
@@ -431,7 +444,7 @@ export default function Home() {
             </div>
             <div className="collapse collapse-arrow bg-base-100 border border-base-300">
               <input type="radio" name="my-accordion-2" />
-              <div className="collapse-title font-semibold">查询智能体实例状态</div>
+              <div className="collapse-title font-semibold">查询智能体实例状态（QueryAgentInstanceStatus）</div>
               <div className="collapse-content text-sm">
                 <button className="btn btn-sm" onClick={async () => {
                   try {
@@ -450,9 +463,9 @@ export default function Home() {
                   } catch (error) {
                     alert('请求失败：' + error.message);
                   }
-                }}>点我发起请求</button>
+                }}>点我发起请求（Send Request）</button>
                 <fieldset className="fieldset">
-                  <legend className="fieldset-legend">请求参数</legend>
+                  <legend className="fieldset-legend">请求参数（Request Parameters）</legend>
                   <textarea id="query-instance-textarea" className="textarea w-full h-[300px]" placeholder="请根据您地实际内容填写" defaultValue={`
 {
     "AgentInstanceId": "1909811657303920640"
