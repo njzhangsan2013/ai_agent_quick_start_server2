@@ -94,6 +94,11 @@ export interface ZIMConfig {
     LoadMessageCount: number;
 }
 
+export interface DigitalHumanInfo {
+    DigitalHumanId: string;
+    ConfigId: string;
+}
+
 export interface MessageHistory {
     SyncMode: number;
     Messages: any[];
@@ -279,6 +284,29 @@ export class ZegoAIAgent {
             AgentId: agentId,
             UserId: userId,
             RTC: rtcInfo,
+            MessageHistory: messageHistory || {
+                SyncMode: 1, // Change to 0 to use history messages from ZIM
+                Messages: [],
+                WindowSize: 10
+            },
+            LLM: llmConfig,
+            TTS: ttsConfig,
+            ASR: asrConfig,
+            CallbackConfig: callbackConfig
+        };
+        const result = await this.sendRequest<any>(action, body);
+        console.log("create agent instance result", result);
+        return result;
+    }
+
+    async createDigitalHumanAgentInstance(agentId: string, userId: string, rtcInfo: RtcInfo, digitalHumanInfo: DigitalHumanInfo, llmConfig: LLMConfig | null = null, ttsConfig: TTSConfig | null = null, asrConfig: ASRConfig | null = null, messageHistory: MessageHistory | null = null, callbackConfig: CallbackConfig | null = null) {
+        // https://aigc-aiagent-api.zegotech.cn?Action=CreateDigitalHumanAgentInstance
+        const action = 'CreateDigitalHumanAgentInstance';
+        const body = {
+            AgentId: agentId,
+            UserId: userId,
+            RTC: rtcInfo,
+            DigitalHuman: digitalHumanInfo,
             MessageHistory: messageHistory || {
                 SyncMode: 1, // Change to 0 to use history messages from ZIM
                 Messages: [],

@@ -31,6 +31,7 @@ After completion, you can open [http://localhost:3000](http://localhost:3000) to
 Once running successfully, you can call the following interfaces:
 - Get ZEGO Token: `http://localhost:3000/api/zego-token`
 - Start talking with AI Agent: `http://localhost:3000/api/start`
+- Start a video call with the digital human agent: `http://localhost:3000/api/start-digital-human`
 - Stop talk with AI Agent: `http://localhost:3000/api/stop`
 
 Note: If you are running the server on a PC/Mac and debugging on mobile devices like Android or iOS, please replace `localhost` with the actual LAN address of your PC/Mac.
@@ -90,6 +91,7 @@ Click the button above to deploy this project to the Vercel platform with one cl
 Use this domain to access the API interfaces:
 - Get ZEGO Token: `https://****.vercel.app/api/api/zego-token`
 - Start talking with AI Agent: `https://****.vercel.app/api/start`
+- Start a video call with the digital human agent: `https://****.vercel.app/api/start-digital-human`
 - Stop talk with AI Agent: `https://****.vercel.app/api/api/stop`
 
 ## Using the Service

@@ -247,7 +247,7 @@ export default function Home() {
 
 
           <input type="radio" name="my_tabs_2" className="tab" aria-label="智能体实例管理（Agent Instance Management）" />
-          <div className="tab-content" style={{ minHeight: '800px' }}>
+          <div className="tab-content" style={{ minHeight: '1200px' }}>
             <div className="collapse collapse-arrow bg-base-100 border border-base-300">
               <input type="radio" name="my-accordion-2" />
               <div className="collapse-title font-semibold">创建智能体实例（CreateAgentInstance）</div>
@@ -287,6 +287,56 @@ export default function Home() {
         "AgentStreamId": "agent_stream_1",
         "AgentUserId": "agent_user_1",
         "UserStreamId": "user_stream_1"
+    }
+}
+
+                  `}></textarea>
+                </fieldset>
+              </div>
+            </div>
+            <div className="collapse collapse-arrow bg-base-100 border border-base-300">
+              <input type="radio" name="my-accordion-2" />
+              <div className="collapse-title font-semibold">创建数字人智能体实例（CreateDigitalHumanAgentInstance）</div>
+              <div className="collapse-content text-sm">
+                <div role="alert" className="alert alert-warning alert-soft">
+                  <span>请注意检查参数是否有效！即使参数无效也可能创建成功！</span>
+                </div>
+                <div role="alert" className="alert alert-warning alert-soft">
+                  <span>Please check if the parameters are valid! Creation may succeed even with invalid parameters!</span>
+                </div>
+                <button className="btn btn-sm" onClick={async () => {
+                  try {
+                    const response = await fetch('/api/passthrough-request', {
+                      method: 'POST',
+                      headers: {
+                        'Content-Type': 'application/json',
+                      },
+                      body: JSON.stringify({
+                        action: 'CreateDigitalHumanAgentInstance',
+                        data: JSON.parse(document.querySelector('#create-digital-human-agent-instance-textarea').value)
+                      }),
+                    });
+                    const result = await response.json();
+                    alert(`请求结果：${JSON.stringify(result)}`);
+                  } catch (error) {
+                    alert('请求失败：' + error.message);
+                  }
+                }}>点我发起请求（Send Request）</button>
+                <fieldset className="fieldset">
+                  <legend className="fieldset-legend">请求参数（Request Parameters）</legend>
+                  <textarea id="create-digital-human-agent-instance-textarea" className="textarea w-full h-[300px]" placeholder="请根据您地实际内容填写" defaultValue={`
+{
+    "AgentId": "test-agent-123",
+    "UserId": "user_1",
+    "RTC": {
+        "RoomId": "room_1",
+        "AgentStreamId": "agent_stream_1",
+        "AgentUserId": "agent_user_1",
+        "UserStreamId": "user_stream_1"
+    },
+    "DigitalHuman": {
+        "DigitalHumanId": "digital_human_1",
+        "ConfigId": "web"
     }
 }
 
