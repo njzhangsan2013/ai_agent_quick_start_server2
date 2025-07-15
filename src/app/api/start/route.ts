@@ -62,6 +62,8 @@ export async function POST(req: NextRequest) {
         agent_id: agent_id,
         agent_name: agent_name,
         agent_instance_id: agent_instance_id,
+        agent_stream_id: agent_stream_id,
+        agent_user_id: agent_user_id,
       },
       { status: 200 }
     );

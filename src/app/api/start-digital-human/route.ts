@@ -28,6 +28,8 @@ interface DigitalHumanResponse {
   agent_instance_id?: string;
   digital_human_config?: any;
   request_id?: string;
+  agent_stream_id?: string;
+  agent_user_id?: string;
 }
 
 // 工具函数
@@ -105,7 +107,9 @@ function createSuccessResponse(
   agentName: string,
   agentInstanceId: string,
   digitalHumanConfig: any,
-  requestId: string
+  requestId: string,
+  agentStreamId: string,
+  agentUserId: string,
 ): NextResponse {
   const response: DigitalHumanResponse = {
     code: 0,
@@ -115,6 +119,8 @@ function createSuccessResponse(
     agent_instance_id: agentInstanceId,
     digital_human_config: digitalHumanConfig,
     request_id: requestId,
+    agent_stream_id: agentStreamId,
+    agent_user_id: agentUserId,
   };
   
   return NextResponse.json(response, { status: 200 });
@@ -204,7 +210,9 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
       CONSTANTS.AGENT_NAME,
       agentInstanceId,
       result.Data.DigitalHumanConfig,
-      result.Data.RequestId
+      result.Data.RequestId,
+      agent_stream_id,
+      agent_user_id,
     );
 
   } catch (error) {
