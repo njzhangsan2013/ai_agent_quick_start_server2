@@ -95,6 +95,8 @@ async function handleConcurrencyLimit(
     agent_name: CONSTANTS.AGENT_NAME,
     agent_instance_id: fallbackResult.Data.AgentInstanceId,
     request_id: fallbackResult.Data.RequestId,
+    agent_stream_id: roomConfig.AgentStreamId,
+    agent_user_id: roomConfig.AgentUserId,
     message: `数字人并发已满，已启动语音互动模式: ${fallbackResult.Message}`,
   };
   
