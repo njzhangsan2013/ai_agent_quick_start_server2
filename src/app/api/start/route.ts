@@ -55,8 +55,6 @@ export async function POST(req: NextRequest) {
     const agent_instance_id = result.Data.AgentInstanceId;
     console.log("create agent instance", agent_instance_id);
 
-    store.setAgentInstanceId(agent_instance_id);
-
     return Response.json(
       {
         code: 0,

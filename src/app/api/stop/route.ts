@@ -23,14 +23,6 @@ export async function POST(req: NextRequest) {
       );
     }
 
-    // 如果请求体中没有提供，则从存储中获取 / If not provided in request body, get from storage
-    if (!agent_instance_id) {
-      const store = AgentStore.getInstance();
-      agent_instance_id = store.getAgentInstanceId();
-    }
-
-    console.log("try to delete instance: ", agent_instance_id);
-
     if (!agent_instance_id) {
       return Response.json(
         {
@@ -46,10 +38,6 @@ export async function POST(req: NextRequest) {
 
     const assistant = ZegoAIAgent.getInstance();
     await assistant.deleteAgentInstance(agent_instance_id);
-
-    // 删除存储的 agent_instance_id / Clear stored agent_instance_id
-    const store = AgentStore.getInstance();
-    store.setAgentInstanceId("");
 
     return Response.json(
       {
