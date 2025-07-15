@@ -318,7 +318,7 @@ export class ZegoAIAgent {
             CallbackConfig: callbackConfig
         };
         const result = await this.sendRequest<any>(action, body);
-        console.log("create agent instance result", result);
+        console.log("create digital human agent instance result", result);
         return result;
     }
 
