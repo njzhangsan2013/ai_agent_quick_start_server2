@@ -1,4 +1,5 @@
 import { createHash } from 'crypto';
+import { isEqual } from '@/lib/object';
 
 const SYSTEM_PROMPT = `
 回答问题要求：你在做角色扮演，请按照人设要求与用户对话，直接输出回答，回答时以句号为维度，单次回答最长不要超过3句，不能超过100字。
@@ -36,6 +37,16 @@ const SYSTEM_PROMPT = `
 10. 用户：李老师，谢谢您的教导。
 李悦然：看到你的进步，老师比什么都开心，继续加油！
 `;
+
+// 常量定义
+export const CONSTANTS = {
+    AGENT_ID: "ai_agent_example_1",
+    AGENT_NAME: "李浩然",
+    ERROR_CODES: {
+      DIGITAL_HUMAN_CONCURRENCY_LIMIT: 410001025,
+    },
+  } as const;
+
 export interface RtcInfo {
     RoomId: string;
     AgentStreamId: string;
@@ -235,23 +246,16 @@ export class ZegoAIAgent {
         return result.Data.Agents;
     }
 
-    async registerAgent(agentId: string, agentName: string, llmConfig: LLMConfig | null = null, ttsConfig: TTSConfig | null = null, asrConfig: ASRConfig | null = null) {
-        if (!process.env.LLM_BASE_URL || !process.env.LLM_API_KEY || !process.env.LLM_MODEL) {
-            throw new Error('LLM_BASE_URL, LLM_API_KEY and LLM_MODEL environment variables must be set');
-        }
-        // https://aigc-aiagent-api.zegotech.cn?Action=RegisterAgent
-        const action = 'RegisterAgent';
-        const body = {
-            AgentId: agentId,
-            Name: agentName,
-            LLM: llmConfig || {
+    getDefaultAgentConfig() {
+        return {
+            LLM: {
                 Url: process.env.LLM_BASE_URL || "",
                 ApiKey: process.env.LLM_API_KEY || "",
                 Model: process.env.LLM_MODEL || "",
                 SystemPrompt: SYSTEM_PROMPT
             },
-            TTS: ttsConfig || {
-                Vendor: "Bytedance",
+            TTS: {
+                Vendor: "ByteDance",
                 Params: {
                     "app": {
                         "appid": process.env.TTS_BYTEDANCE_APP_ID || "",
@@ -269,12 +273,84 @@ export class ZegoAIAgent {
                 },
                 FilterText: [{ BeginCharacters: "(", EndCharacters: ")" }, { BeginCharacters: "（", EndCharacters: "）" }, { BeginCharacters: "{", EndCharacters: "}" }],
             },
-            ASR: asrConfig || {
-                HotWord: "",
+            ASR: {
                 Params: {}
             }
+        }
+    }
+
+    async registerAgent(agentId: string, agentName: string, llmConfig: LLMConfig | null = null, ttsConfig: TTSConfig | null = null, asrConfig: ASRConfig | null = null) {
+        if (!process.env.LLM_BASE_URL || !process.env.LLM_API_KEY || !process.env.LLM_MODEL) {
+            throw new Error('LLM_BASE_URL, LLM_API_KEY and LLM_MODEL environment variables must be set');
+        }
+        const { LLM, TTS, ASR } = await this.getDefaultAgentConfig();
+        // https://aigc-aiagent-api.zegotech.cn?Action=RegisterAgent
+        const action = 'RegisterAgent';
+        const body = {
+            AgentId: agentId,
+            Name: agentName,
+            LLM: llmConfig || LLM,
+            TTS: ttsConfig || TTS,
+            ASR: asrConfig || ASR
         };
         return this.sendRequest<any>(action, body);
+    }
+
+    compareAgentConfig(config: any) {
+        const { LLM, TTS, ASR } = this.getDefaultAgentConfig();
+        const defaultConfig = {
+            LLM,
+            TTS,
+            ASR
+        }
+        const agentConfig = {
+            LLM: config.LLM,
+            TTS: config.TTS,
+            ASR: config.ASR
+        }
+        return isEqual(agentConfig, defaultConfig);
+    }
+
+    async updateAgent(agentId: string, agentName: string, llmConfig: LLMConfig | null = null, ttsConfig: TTSConfig | null = null, asrConfig: ASRConfig | null = null) {
+        if (!process.env.LLM_BASE_URL || !process.env.LLM_API_KEY || !process.env.LLM_MODEL) {
+            throw new Error('LLM_BASE_URL, LLM_API_KEY and LLM_MODEL environment variables must be set');
+        }
+        const { LLM, TTS, ASR } = await this.getDefaultAgentConfig();
+        // https://aigc-aiagent-api.zegotech.cn?Action=UpdateAgent
+        const action = 'UpdateAgent';
+        const body = {
+            AgentId: agentId,
+            Name: agentName,
+            LLM: llmConfig || LLM,
+            TTS: ttsConfig || TTS,
+            ASR: asrConfig || ASR
+        };
+        console.log('updateAgent body', body)
+        return this.sendRequest<any>(action, body);
+    }
+
+    // 智能体注册逻辑
+    async ensureAgentRegistered(agentId: string, agentName: string): Promise<void> {
+      try {
+        const agents = await this.queryAgents([agentId]);
+        const agentExists = agents?.length > 0 &&
+          agents.find((agent: any) => agent.AgentId === agentId);
+
+        if (!agentExists) {
+          await this.registerAgent(agentId, agentName);
+          console.log(`智能体注册成功: ${agentId}`);
+        } else {
+          console.log(`智能体已存在: ${agentId}`);
+          const isConfigEqual = this.compareAgentConfig(agentExists)
+          console.log('isConfigEqual', isConfigEqual)
+          if (!isConfigEqual) {
+            await this.updateAgent(agentId, agentName);
+          }
+        }
+      } catch (error) {
+        console.error(`智能体注册失败: ${agentId}`, error);
+        throw new Error(`智能体注册失败: ${(error as any).message}`);
+      }
     }
 
     async createAgentInstance(agentId: string, userId: string, rtcInfo: RtcInfo, llmConfig: LLMConfig | null = null, ttsConfig: TTSConfig | null = null, asrConfig: ASRConfig | null = null, messageHistory: MessageHistory | null = null, callbackConfig: CallbackConfig | null = null) {

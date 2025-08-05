@@ -1,5 +1,5 @@
 import { NextRequest } from "next/server";
-import { ZegoAIAgent } from "@/lib/zego/aiagent";
+import { ZegoAIAgent, CONSTANTS } from "@/lib/zego/aiagent";
 import { AgentStore } from "@/lib/store";
 
 // 定义请求体类型
@@ -12,25 +12,13 @@ interface RequestBody {
 function randomId(prefix: string) {
   return prefix + Math.random().toString(36).substring(2, 10);
 }
-const agent_id = "ai_agent_example_1";
-const agent_name = "李浩然";
 
 export async function POST(req: NextRequest) {
   try {
     const assistant = ZegoAIAgent.getInstance();
 
-    const agents = await assistant.queryAgents([agent_id]);
-    // console.log("query agents", agents);
-    if (
-      !agents ||
-      agents.length === 0 ||
-      !agents.find((agent: any) => agent.AgentId === agent_id)
-    ) {
-      await assistant.registerAgent(agent_id, agent_name);
-      console.log("register agent success");
-    } else {
-      console.log("agent already exists");
-    }
+    // 确保智能体已注册
+    await assistant.ensureAgentRegistered(CONSTANTS.AGENT_ID, CONSTANTS.AGENT_NAME);
 
     // 保存 agent_instance_id
     const store = AgentStore.getInstance();
@@ -46,7 +34,7 @@ export async function POST(req: NextRequest) {
     const agent_user_id = randomId("user_agent_");
     const user_stream_id = body.user_stream_id;
 
-    const result = await assistant.createAgentInstance(agent_id, user_id, {
+    const result = await assistant.createAgentInstance(CONSTANTS.AGENT_ID, user_id, {
       RoomId: room_id,
       AgentStreamId: agent_stream_id,
       AgentUserId: agent_user_id,
@@ -59,8 +47,8 @@ export async function POST(req: NextRequest) {
       {
         code: 0,
         message: "start agent success",
-        agent_id: agent_id,
-        agent_name: agent_name,
+        agent_id: CONSTANTS.AGENT_ID,
+        agent_name: CONSTANTS.AGENT_NAME,
         agent_instance_id: agent_instance_id,
         agent_stream_id: agent_stream_id,
         agent_user_id: agent_user_id,

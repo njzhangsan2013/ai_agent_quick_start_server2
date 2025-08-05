@@ -1,15 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
-import { ZegoAIAgent } from "@/lib/zego/aiagent";
+import { CONSTANTS, LLMConfig, TTSConfig, ZegoAIAgent } from "@/lib/zego/aiagent";
 import { AgentStore } from "@/lib/store";
-
-// 常量定义
-const CONSTANTS = {
-  AGENT_ID: "ai_agent_example_1",
-  AGENT_NAME: "李浩然",
-  ERROR_CODES: {
-    DIGITAL_HUMAN_CONCURRENCY_LIMIT: 410001025,
-  },
-} as const;
 
 // 类型定义
 interface StartDigitalHumanRequest {
@@ -42,40 +33,25 @@ function validateRequestBody(body: any): body is StartDigitalHumanRequest {
   return requiredFields.every(field => typeof body[field] === 'string' && body[field].trim());
 }
 
-// 智能体注册逻辑
-async function ensureAgentRegistered(assistant: any, agentId: string, agentName: string): Promise<void> {
-  try {
-    const agents = await assistant.queryAgents([agentId]);
-    const agentExists = agents?.length > 0 && 
-      agents.find((agent: any) => agent.AgentId === agentId);
-    
-    if (!agentExists) {
-      await assistant.registerAgent(agentId, agentName);
-      console.log(`智能体注册成功: ${agentId}`);
-    } else {
-      console.log(`智能体已存在: ${agentId}`);
-    }
-  } catch (error) {
-    console.error(`智能体注册失败: ${agentId}`, error);
-    throw new Error(`智能体注册失败: ${(error as any).message}`);
-  }
-}
-
 // 创建数字人实例
 async function createDigitalHumanInstance(
   assistant: any,
   agentId: string,
   userId: string,
   roomConfig: any,
-  digitalHumanConfig: any
+  digitalHumanConfig: any,
+  llmConfig?: LLMConfig,
+  ttsConfig?: TTSConfig
 ): Promise<any> {
   const result = await assistant.createDigitalHumanAgentInstance(
     agentId,
     userId,
     roomConfig,
-    digitalHumanConfig
+    digitalHumanConfig,
+    llmConfig,
+    ttsConfig
   );
-  
+
   console.log(`创建数字人实例结果: ${result.Code}`);
   return result;
 }
@@ -88,7 +64,7 @@ async function handleConcurrencyLimit(
   roomConfig: any
 ): Promise<NextResponse> {
   const fallbackResult = await assistant.createAgentInstance(agentId, userId, roomConfig);
-  
+
   const response: DigitalHumanResponse = {
     code: fallbackResult.Code,
     agent_id: agentId,
@@ -99,7 +75,7 @@ async function handleConcurrencyLimit(
     agent_user_id: roomConfig.AgentUserId,
     message: `数字人并发已满，已启动语音互动模式: ${fallbackResult.Message}`,
   };
-  
+
   return NextResponse.json(response, { status: 200 });
 }
 
@@ -124,7 +100,7 @@ function createSuccessResponse(
     agent_stream_id: agentStreamId,
     agent_user_id: agentUserId,
   };
-  
+
   return NextResponse.json(response, { status: 200 });
 }
 
@@ -134,7 +110,7 @@ function createErrorResponse(code: number, message: string): NextResponse {
     code,
     message
   };
-  
+
   return NextResponse.json(response, { status: 200 });
 }
 
@@ -144,9 +120,9 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const body = await req.json();
     if (!validateRequestBody(body)) {
       return NextResponse.json(
-        { 
-          code: 400, 
-          message: "请求参数不完整，缺少必需字段: digital_human_id, config_id, user_id, room_id, user_stream_id" 
+        {
+          code: 400,
+          message: "请求参数不完整，缺少必需字段: digital_human_id, config_id, user_id, room_id, user_stream_id"
         },
         { status: 400 }
       );
@@ -169,7 +145,7 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
     const store = AgentStore.getInstance();
 
     // 确保智能体已注册
-    await ensureAgentRegistered(assistant, CONSTANTS.AGENT_ID, CONSTANTS.AGENT_NAME);
+    await assistant.ensureAgentRegistered(CONSTANTS.AGENT_ID, CONSTANTS.AGENT_NAME);
 
     // 构建配置
     const roomConfig = {
@@ -219,10 +195,10 @@ export async function POST(req: NextRequest): Promise<NextResponse> {
 
   } catch (error) {
     console.error("启动数字人智能体失败:", error);
-    
+
     const errorCode = (error as any).code || 500;
     const errorMessage = (error as any).message || "启动数字人智能体时发生未知错误";
-    
+
     return NextResponse.json(
       {
         code: errorCode,
