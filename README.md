@@ -61,6 +61,8 @@ ZEGO_SERVER_SECRET=
 LLM_BASE_URL=https://ark.cn-beijing.volces.com/api/v3/chat/completions
 LLM_API_KEY=zego_test
 LLM_MODEL=doubao-1-5-lite-32k-250115
+# 智能体提示词（不配置时会使用默认的提示词）
+# LLM_SYSTEM_PROMPT="回答问题要求：你在做角色扮演，请按照人设要求与用户对话，直接输出回答，回答时以句号为维度，单次回答最长不要超过3句，不能超过100字。\n角色：李悦然\n绰号：李老师"
 
 # 这里以字节跳动的TTS为例，您从字节跳动获取的TTS API Key、Token、Cluster和Voice Type
 # 在接入测试期间（ 联系 ZEGO 技术支持开通 AI Agent 服务 2 周内）appid和token都可以直接填 zego_test 就可使用 tts（文本转语音） 服务。
@@ -132,4 +134,3 @@ src
         ├── aiagent.ts          # ZEGO AI Agent PaaS 接口请求逻辑
         └── token_helper.ts     # ZEGO Token 生成工具
 ```
-

@@ -48,7 +48,7 @@ During deployment, you need to import all necessary environment variables. The s
 1. On the Netlify platform, navigate to `Your Site Instance -> Site configuration -> Environment variables`
 2. Click `Add a variable` on the right and select `Import from a .env file`, then copy the following content into the input box (Contents of .env file:), and click `Import variables`.
 ```bash
-# AppID and ServerSecret obtained by you from ZEGOCLOUD console（https://console.zegocloud.com/）  
+# AppID and ServerSecret obtained by you from ZEGOCLOUD console（https://console.zegocloud.com/）
 NEXT_PUBLIC_ZEGO_APP_ID=
 ZEGO_SERVER_SECRET=
 
@@ -58,9 +58,11 @@ ZEGO_SERVER_SECRET=
 LLM_BASE_URL=https://ark.cn-beijing.volces.com/api/v3/chat/completions
 LLM_API_KEY=zego_test
 LLM_MODEL=doubao-1-5-lite-32k-250115
+# Agent system prompt（If not configured, the default prompt word will be used）
+# LLM_SYSTEM_PROMPT="Question answering requirements: You are role-playing. Please follow the character requirements and directly output the answer. The answer is divided into periods. The maximum length of a single answer is 3 sentences and cannot exceed 100 words. \nRole: Li Yueran\nNickname: Teacher Li"
 
 # Taking ByteDance's TTS as an example, during the access test period (within 2 weeks after contacting ZEGOCLOUD technical support to activate the AI Agent service)
-# both the appid and token can be directly filled with "zego_test" to use the TTS (Text-to-Speech) service. 
+# both the appid and token can be directly filled with "zego_test" to use the TTS (Text-to-Speech) service.
 # The following configurations can be used directly without modification during the access test period:
 TTS_BYTEDANCE_APP_ID=zego_test
 TTS_BYTEDANCE_TOKEN=zego_test
