@@ -71,6 +71,9 @@ TTS_BYTEDANCE_APP_ID=zego_test
 TTS_BYTEDANCE_TOKEN=zego_test
 TTS_BYTEDANCE_CLUSTER=volcano_tts
 TTS_BYTEDANCE_VOICE_TYPE=zh_female_wanwanxiaohe_moon_bigtts
+
+# 创建智能体时的高级配置，可配置打断模式等，请参考：https://doc-zh.zego.im/aiagent-server/api-reference/agent-instance-management/create-agent-instance
+# ADVANCED_CONFIG='{"InterruptMode":1}'
 ```
 ![](./images/import-env.png)
 3. 跳转到 `Deploys` 页面并点击右侧的 `Trigger deploy` 然后选择 `Deploy site` 选项触发网站重新构建

@@ -1,6 +1,7 @@
 import { NextRequest } from "next/server";
-import { ZegoAIAgent, CONSTANTS } from "@/lib/zego/aiagent";
+import { ZegoAIAgent, CONSTANTS, AdvancedConfig, LLMConfig, TTSConfig, ASRConfig, MessageHistory, CallbackConfig } from "@/lib/zego/aiagent";
 import { AgentStore } from "@/lib/store";
+import { parseJSON } from "@/lib/json";
 
 // 定义请求体类型
 interface RequestBody {
@@ -33,13 +34,19 @@ export async function POST(req: NextRequest) {
     const agent_stream_id = randomId("stream_agent_");
     const agent_user_id = randomId("user_agent_");
     const user_stream_id = body.user_stream_id;
+    const llmConfig: LLMConfig | null = null;
+    const ttsConfig: TTSConfig | null = null;
+    const asrConfig: ASRConfig | null = null;
+    const messageHistory: MessageHistory | null = null;
+    const callbackConfig: CallbackConfig | null = null;
+    const advancedConfig: AdvancedConfig | null = process.env.ADVANCED_CONFIG ? parseJSON(process.env.ADVANCED_CONFIG) : null;
 
     const result = await assistant.createAgentInstance(CONSTANTS.AGENT_ID, user_id, {
       RoomId: room_id,
       AgentStreamId: agent_stream_id,
       AgentUserId: agent_user_id,
       UserStreamId: user_stream_id,
-    });
+    }, llmConfig, ttsConfig, asrConfig, messageHistory, callbackConfig, advancedConfig);
     const agent_instance_id = result.Data.AgentInstanceId;
     console.log("create agent instance", agent_instance_id);
 

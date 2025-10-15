@@ -122,6 +122,10 @@ export interface CallbackConfig {
     LLMResult: number;
 }
 
+export interface AdvancedConfig {
+    InterruptMode?: 0 | 1,
+}
+
 // 会话消息响应类型
 export interface ConversationMessagesResponse {
     Code: number;
@@ -353,7 +357,7 @@ export class ZegoAIAgent {
       }
     }
 
-    async createAgentInstance(agentId: string, userId: string, rtcInfo: RtcInfo, llmConfig: LLMConfig | null = null, ttsConfig: TTSConfig | null = null, asrConfig: ASRConfig | null = null, messageHistory: MessageHistory | null = null, callbackConfig: CallbackConfig | null = null) {
+    async createAgentInstance(agentId: string, userId: string, rtcInfo: RtcInfo, llmConfig: LLMConfig | null = null, ttsConfig: TTSConfig | null = null, asrConfig: ASRConfig | null = null, messageHistory: MessageHistory | null = null, callbackConfig: CallbackConfig | null = null, advancedConfig: AdvancedConfig | null = null) {
         // https://aigc-aiagent-api.zegotech.cn?Action=CreateAgentInstance
         const action = 'CreateAgentInstance';
         const body = {
@@ -368,7 +372,8 @@ export class ZegoAIAgent {
             LLM: llmConfig,
             TTS: ttsConfig,
             ASR: asrConfig,
-            CallbackConfig: callbackConfig
+            CallbackConfig: callbackConfig,
+            AdvancedConfig: advancedConfig,
         };
         const result = await this.sendRequest<any>(action, body);
         console.log("create agent instance result", result);

@@ -68,6 +68,10 @@ TTS_BYTEDANCE_APP_ID=zego_test
 TTS_BYTEDANCE_TOKEN=zego_test
 TTS_BYTEDANCE_CLUSTER=volcano_tts
 TTS_BYTEDANCE_VOICE_TYPE=zh_female_wanwanxiaohe_moon_bigtts
+
+# For advanced configuration when creating an agent, including configurable interruption modes, please refer to: https://doc-zh.zego.im/aiagent-server/api-reference/agent-instance-management/create-agent-instance
+# ADVANCED_CONFIG='{"InterruptMode":1}'
+
 ```
 ![](./images/import-env.png)
 3. Go to the `Deploys` page and click `Trigger deploy` on the right, then select the `Deploy site` option to trigger a website rebuild
