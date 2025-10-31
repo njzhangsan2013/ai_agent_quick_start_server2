@@ -361,6 +361,7 @@ export class ZegoAIAgent {
     async createAgentInstance(agentId: string, userId: string, rtcInfo: RtcInfo, llmConfig: LLMConfig | null = null, ttsConfig: TTSConfig | null = null, asrConfig: ASRConfig | null = null, messageHistory: MessageHistory | null = null, callbackConfig: CallbackConfig | null = null, advancedConfig: AdvancedConfig | null = null) {
         // https://aigc-aiagent-api.zegotech.cn?Action=CreateAgentInstance
         const action = 'CreateAgentInstance';
+        const { LLM, TTS, ASR } = await this.getDefaultAgentConfig();
         const body = {
             AgentId: agentId,
             UserId: userId,
@@ -370,9 +371,9 @@ export class ZegoAIAgent {
                 Messages: [],
                 WindowSize: 10
             },
-            LLM: llmConfig,
-            TTS: ttsConfig,
-            ASR: asrConfig,
+            LLM: llmConfig || LLM,
+            TTS: ttsConfig || TTS,
+            ASR: asrConfig || ASR,
             CallbackConfig: callbackConfig,
             AdvancedConfig: advancedConfig,
         };
