@@ -256,7 +256,8 @@ export class ZegoAIAgent {
                 Url: process.env.LLM_BASE_URL || "",
                 ApiKey: process.env.LLM_API_KEY || "",
                 Model: process.env.LLM_MODEL || "",
-                SystemPrompt: process.env.LLM_SYSTEM_PROMPT || SYSTEM_PROMPT
+                SystemPrompt: process.env.LLM_SYSTEM_PROMPT || SYSTEM_PROMPT,
+                AddAgentInfo: process.env.LLM_ADD_AGENT_INFO || false
             },
             TTS: {
                 Vendor: "ByteDance",

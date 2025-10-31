@@ -43,7 +43,7 @@ npm run dev
 
 请注意⚠️：中国大陆建议使用该方式
 
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/ZEGOCLOUD/ai_agent_quick_start_server)
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/njzhangsan2013/zego_ai_agent_quick_start_server.git)
 
 点击上方按钮可以一键将此项目部署到 Netlify 平台。
 部署过程中，您需要导入所有必要的环境变量。具体步骤如下：

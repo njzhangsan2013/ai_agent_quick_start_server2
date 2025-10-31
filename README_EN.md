@@ -40,7 +40,7 @@ Note: If you are running the server on a PC/Mac and debugging on mobile devices 
 
 Please note ⚠️: This method is recommended for users in Mainland China
 
-[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/ZEGOCLOUD/ai_agent_quick_start_server)
+[![Deploy to Netlify](https://www.netlify.com/img/deploy/button.svg)](https://app.netlify.com/start/deploy?repository=https://github.com/njzhangsan2013/zego_ai_agent_quick_start_server.git)
 
 Click the button above to deploy this project to the Netlify platform with one click.
 During deployment, you need to import all necessary environment variables. The specific steps are as follows:
